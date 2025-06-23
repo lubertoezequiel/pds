@@ -1,4 +1,4 @@
-TPO PROYECTO DE DESARROLLO DE SOFTWARE
+# TPO PROYECTO DE DESARROLLO DE SOFTWARE
 **Requerimientos Funcionales** 
 1. **Registro de usuarios**: Los usuarios deberán registrarse en la aplicación móvil mediante un nombre de usuario, correo electrónico y contraseña. Opcionalmente, podrán ingresar su deporte favorito y nivel de juego. 
 
