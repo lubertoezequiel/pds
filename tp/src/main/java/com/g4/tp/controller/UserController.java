@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.g4.tp.model.User;
+import com.g4.tp.model.UserDTO;
 import com.g4.tp.service.UserService;
 
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
+   
     @Autowired
     private UserService userService;
 
@@ -21,9 +23,17 @@ public class UserController {
     public String hello() {
         return "Hola usuario";
     }
+    
     @PostMapping("/create")
-    public User createUser(@RequestBody User user) {
-        userService.createUser(user);
+    public UserDTO createUser(@RequestBody UserDTO user) {
+        System.out.println("Creating user: " + user.getName() + 
+                           " with email: " + user.getEmail()+ 
+                           " and password: " + user.getPassword());
+                           
+        User usuario = new User(user.getName(), user.getEmail(), user.getPassword());
+    
+        userService.createUser(usuario);
+
         return user;
     }
     

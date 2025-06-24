@@ -13,6 +13,9 @@ public class UserService {
     private IUserRepository userRepository;
 
     public User createUser(User user) {
+        System.out.println("Creating user: " + user.getName() + 
+                           " with email: " + user.getEmail() + 
+                           " and password: " + user.getPassword());
         // Here you can add any business logic before saving the user
         return userRepository.save(user);
     }
