@@ -3,7 +3,7 @@ package com.g4.tp;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.g4.tp.model.User;
+import com.g4.tp.model.entities.User;
 
 @SpringBootApplication
 public class TpApplication {
@@ -13,7 +13,6 @@ public class TpApplication {
 
 		User user = new User("John Doe", "john.doe@example.com", "password123");
 
-		
 	}
 
 }

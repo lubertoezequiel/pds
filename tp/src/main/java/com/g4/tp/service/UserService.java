@@ -3,7 +3,7 @@ package com.g4.tp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.g4.tp.model.User;
+import com.g4.tp.model.entities.User;
 import com.g4.tp.repository.IUserRepository;
 
 @Service
@@ -13,9 +13,9 @@ public class UserService {
     private IUserRepository userRepository;
 
     public User createUser(User user) {
-        System.out.println("Creating user: " + user.getName() + 
-                           " with email: " + user.getEmail() + 
-                           " and password: " + user.getPassword());
+        System.out.println("Creating user: " + user.getName() +
+                " with email: " + user.getEmail() +
+                " and password: " + user.getPassword());
         // Here you can add any business logic before saving the user
         return userRepository.save(user);
     }
