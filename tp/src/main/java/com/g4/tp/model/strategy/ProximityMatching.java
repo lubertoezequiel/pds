@@ -2,6 +2,7 @@ package com.g4.tp.model.strategy;
 
 import java.util.List;
 import com.g4.tp.model.entities.User;
+import com.g4.tp.model.interfaces.IMatchingStrategy;
 import com.g4.tp.model.entities.Match;
 
 public class ProximityMatching implements IMatchingStrategy {

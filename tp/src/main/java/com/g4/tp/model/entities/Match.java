@@ -2,6 +2,9 @@ package com.g4.tp.model.entities;
 
 import java.time.LocalDateTime;
 
+import com.g4.tp.model.interfaces.IMatchState;
+import com.g4.tp.model.interfaces.IMatchingStrategy;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,19 +22,24 @@ public class Match {
     private int duration;
     private LocalDateTime date;
     private LocalDateTime time;
-    private String state; // TODO: Implementar patrón State más adelante
+    private IMatchState state;
+    private IMatchingStrategy matchingStrategy;
+    // TODO: Implementar patrón State más adelante
 
     // TODO: Agregar relaciones con User (players), Location, etc.
     // TODO: Implementar IMatchingStrategy
     // TODO: Implementar Observer pattern para notificaciones
 
-    public Match(String sport, int duration, LocalDateTime date, LocalDateTime time) {
 
-        this.sport = sport;
-        this.duration = duration;
+
+    public Match(String sport, int duration, LocalDateTime date, LocalDateTime time) {
         this.date = date;
+        this.duration = duration;
+        this.id = id;
+        this.matchingStrategy = matchingStrategy;
+        this.sport = sport;
+        this.state = state;
         this.time = time;
-        this.state = "Necesitamos jugadores"; // Estado inicial
     }
 
     public Long getId() {
@@ -74,12 +82,6 @@ public class Match {
         this.time = time;
     }
 
-    public String getState() {
-        return state;
-    }
 
-    public void setState(String state) {
-        this.state = state;
-    }
 
 }
