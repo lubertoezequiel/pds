@@ -1,7 +1,7 @@
 package com.g4.tp.DTOs;
 
 public class SportDTO {
-
+    private int id; // Assuming you want to include an ID for the sport
     private String name;
     private String description;
     private int requiredPlayers;
@@ -35,6 +35,12 @@ public class SportDTO {
 
     public void setRequiredPlayers(int requiredPlayers) {
         this.requiredPlayers = requiredPlayers;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

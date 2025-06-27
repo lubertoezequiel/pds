@@ -2,14 +2,17 @@ package com.g4.tp.DTOs;
 
 
 public class UserDTO {
-
+    private int id;
     private String name;
     private String email;
     private String password;
     private int [] practicedSportIds; 
     private int favoriteSportId;         
-    private String skillLevel;            
-
+    private String skillLevel;  
+    private Double latitude;
+    private Double longitude;          
+    private String Address;
+     // Optional, if you want to include address information
     public UserDTO() {}
 
     public UserDTO(String name, String email, String password, int [] practicedSportIds, int favoriteSportId, String skillLevel) {
@@ -57,6 +60,28 @@ public class UserDTO {
     public void setSkillLevel(String skillLevel) {
         this.skillLevel = skillLevel;
     }
-
-
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public Double getLatitude() {
+        return latitude;
+    }
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+    public Double getLongitude() {
+        return longitude;
+    }
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+    public String getAddress() {
+        return Address;
+    }
+    public void setAddress(String address) {
+        Address = address;
+    }
 }

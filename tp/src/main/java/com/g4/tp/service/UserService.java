@@ -3,27 +3,39 @@ package com.g4.tp.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.g4.tp.DTOs.UserDTO;
+import com.g4.tp.mapper.UserMapper;
 import com.g4.tp.model.entities.User;
 import com.g4.tp.repository.IUserRepository;
 
 @Service
 public class UserService implements IUserService {
+    
+   
     // Business logic related to User
     @Autowired
     private IUserRepository userRepository;
 
-    public User createUser(User user) {
+    @Autowired
+    private UserMapper userMapper;
+
+    @Override
+    public int createUser(UserDTO oldUser) {
         
+        User user= userMapper.convertToEntity(oldUser);
+
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new RuntimeException("User already exists with email: " + user.getEmail());
         }
+        userRepository.save(user);
+
         
-        return userRepository.save(user);
+        return user.getId();
 
     }
 
     @Override
-    public void deleteUser(Long id) {
+    public void deleteUser(int id) {
       try{
             userRepository.deleteById(id);
         } catch (Exception e) {
@@ -32,13 +44,13 @@ public class UserService implements IUserService {
     }
      
     @Override
-    public User getUserById(Long id) {
+    public User getUserById(int id) {
 
         return userRepository.findById(id).orElse(null);
     }
     
     @Override
-    public User updateUser(Long id, User user) {
+    public User updateUser(int id, User user) {
         User existingUser = userRepository.findById(id).orElse(null);
         if (existingUser == null) {
             throw new RuntimeException("User not found with id: " + id);

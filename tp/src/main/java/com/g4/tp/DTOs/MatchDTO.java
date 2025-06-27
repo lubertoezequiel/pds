@@ -4,12 +4,16 @@ import java.time.LocalDateTime;
 
 public class MatchDTO {
 
-    private String sport;
+    private int id; 
+    private int sport;
     private int duration;
     private LocalDateTime date;
     private LocalDateTime time;
+    private int [] idPlayers;
+    private LocationDTO location;
 
-    public MatchDTO(String sport, int duration, LocalDateTime date, LocalDateTime time) {
+
+    public MatchDTO(int sport, int duration, LocalDateTime date, LocalDateTime time) {
 
         this.sport = sport;
         this.duration = duration;
@@ -17,11 +21,11 @@ public class MatchDTO {
         this.time = time;
     }
 
-    public String getSport() {
+    public int getSport() {
         return sport;
     }
 
-    public void setSport(String sport) {
+    public void setSport(int sport) {
         this.sport = sport;
     }
 
@@ -49,4 +53,22 @@ public class MatchDTO {
         this.time = time;
     }
 
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public int[] getIdPlayers() {
+        return idPlayers;
+    }
+    public void setIdPlayers(int[] idPlayers) {
+        this.idPlayers = idPlayers;
+    }
+    public LocationDTO getLocation() {
+        return location;
+    }
+    public void setLocation(LocationDTO location) {
+        this.location = location;
+    }    
 }

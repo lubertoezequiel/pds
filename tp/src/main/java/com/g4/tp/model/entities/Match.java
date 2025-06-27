@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -24,8 +25,10 @@ import jakarta.persistence.Transient;
 public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
+    @ManyToOne
+    @JoinColumn(name = "sport_id", nullable = false)
     private Sport sport;
     private int duration;
     private LocalDateTime date;
@@ -51,7 +54,7 @@ public class Match {
     public Match() {
         this.date = LocalDateTime.now();
         this.duration = 0;
-        this.id = null;
+        this.id = 0;
         this.matchingStrategy = null;
         this.sport = null;
         this.state = null;
@@ -69,11 +72,11 @@ public class Match {
         this.time = time;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

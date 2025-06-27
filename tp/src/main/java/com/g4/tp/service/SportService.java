@@ -31,7 +31,7 @@ public class SportService implements ISportService {
     }
 
     @Override
-    public Sport getSportById(Long id) {
+    public Sport getSportById(int id) {
         return sportRepository.findById(id).orElse(null);
     }
     
@@ -50,7 +50,7 @@ public class SportService implements ISportService {
     }
 
     @Override
-    public Sport updateSport(Long id, Sport sport) {
+    public Sport updateSport(int id, Sport sport) {
         Sport existingSport = sportRepository.findById(id).orElse(null);
         if (existingSport == null) {
             throw new RuntimeException("Sport not found with id: " + id);
@@ -64,8 +64,14 @@ public class SportService implements ISportService {
     }
 
     @Override
-    public void deleteSport(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteSport'");
+    public void deleteSport(int id) {
+        Sport existingSport = sportRepository.findById(id).orElse(null);
+        if (existingSport == null) {
+            throw new RuntimeException("Sport not found with id: " + id);
+        }
+        
+        sportRepository.delete(existingSport);
     }
+
+
 }

@@ -2,7 +2,17 @@ package com.g4.tp.model.entities;
 
 import java.util.List;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -10,11 +20,12 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String name;
     private String email;
     private String password;
+    private Location location;
 
     @ManyToMany
     @JoinTable(
@@ -40,11 +51,11 @@ public class User {
     }
 
     // Getters y setters
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -94,5 +105,11 @@ public class User {
 
     public void setSkillLevel(SkillLevelEnum skillLevel) {
         this.skillLevel = skillLevel;
+    }
+    public Location getLocation() {
+        return location;
+    }
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }

@@ -12,7 +12,7 @@ public class Sport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long number;
+    private int id;
     private String name;
     private String description;
     private int requiredPlayers;
@@ -28,12 +28,12 @@ public class Sport {
         this.requiredPlayers = requiredPlayers;
     }
 
-    public Long getNumber() {
-        return number;
+    public int getId() {
+        return id;
     }
 
-    public void setId(Long number) {
-        this.number = number;
+    public void setId(int number) {
+        this.id = number;
     }
 
     public String getName() {

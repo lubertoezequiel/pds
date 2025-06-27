@@ -2,7 +2,6 @@ package com.g4.tp.model.state;
 
 import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.User;
-import com.g4.tp.model.entities.Sport;
 
 public class NeedPlayerState implements IMatchState {
 
@@ -21,8 +20,7 @@ public class NeedPlayerState implements IMatchState {
 
     @Override
     public void finishMatch(Match match) {
-        // No se puede finalizar en este estado
-        throw new IllegalStateException("Cannot finish match in NeedPlayer state");
+        
     }
 
     @Override

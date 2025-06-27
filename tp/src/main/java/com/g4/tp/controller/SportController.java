@@ -7,34 +7,36 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.g4.tp.DTOs.SportDTO;
+import com.g4.tp.mapper.SportMapper;
 import com.g4.tp.model.entities.Sport;
 import com.g4.tp.service.ISportService;
-
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
 @RequestMapping("/sport")
 public class SportController {
-
+    @Autowired
+    private SportMapper sportMapper;
+    
     @Autowired
     private ISportService sportService;
   
     @PostMapping("/create")
     public ResponseEntity<?> createSport(@RequestBody SportDTO sport) {
-        Sport sportEntity = convertToEntity(sport);
+        Sport sportEntity = sportMapper.convertToEntity(sport);
         
         try {
             Sport createdSport = sportService.createSport(sportEntity);
-            SportDTO createdSportDTO = convertToDTO(createdSport);
+            SportDTO createdSportDTO = sportMapper.convertToDTO(createdSport);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdSportDTO); 
         } catch (Exception e) {
             Map<String, String> error = Map.of("error", "Sport already exists");
@@ -53,13 +55,13 @@ public class SportController {
     }
 
     @GetMapping("/getById")
-    public ResponseEntity<?> getSportById(@RequestParam Long id) {
+    public ResponseEntity<?> getSportById(@RequestParam int id) {
         try {
             Sport sport = sportService.getSportById(id);
             if (sport == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Sport not found"));
             }
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertToDTO(sport));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(sportMapper.convertToDTO(sport));
         } catch (Exception e) {
             Map<String, String> error = Map.of("error", "Error retrieving sport");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
@@ -70,7 +72,7 @@ public class SportController {
     public ResponseEntity<?> getSportByName(@RequestParam String name) {
         try {
             Sport sport = sportService.findByName(name);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertToDTO(sport));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(sportMapper.convertToDTO(sport));
         } catch (IllegalArgumentException e) {
             Map<String, String> error = Map.of("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -87,8 +89,8 @@ public class SportController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
         try {
-            Sport updatedSport = sportService.updateSport(Long.valueOf(id), convertToEntity(entity));
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertToDTO(updatedSport));
+            Sport updatedSport = sportService.updateSport(Integer.valueOf(id), sportMapper.convertToEntity(entity));
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(sportMapper.convertToDTO(updatedSport));
         } catch (NumberFormatException e) {
             Map<String, String> error = Map.of("error", "Invalid ID format");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -98,7 +100,7 @@ public class SportController {
         }
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteSport(@PathVariable Long id) {
+    public ResponseEntity<?> deleteSport(@PathVariable int id) {
         try {
             sportService.deleteSport(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -109,14 +111,8 @@ public class SportController {
     }    
     // Helper methods to convert between DTO and Entity
 
-    private SportDTO convertToDTO(Sport sport) {
-        SportDTO sportDTO = new SportDTO(sport.getName(), sport.getDescription(), sport.getRequiredPlayers());
-        return sportDTO;
-    }
 
-    private Sport convertToEntity(SportDTO sportDTO) {
-        Sport sport = new Sport(sportDTO.getName(), sportDTO.getDescription(), sportDTO.getRequiredPlayers());
-        return sport;
-    }
+
+
 
 }

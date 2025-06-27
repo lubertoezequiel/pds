@@ -1,9 +1,8 @@
 package com.g4.tp.service;
 
-import com.g4.tp.model.entities.Sport;
-
-
 import java.util.List;
+
+import com.g4.tp.model.entities.Sport;
 
 
 public interface ISportService {
@@ -11,11 +10,11 @@ public interface ISportService {
     
     List<Sport> getAllSports();
     
-    Sport getSportById(Long id);
+    Sport getSportById(int id);
     
-    Sport updateSport(Long id, Sport sport);
+    Sport updateSport(int id, Sport sport);
     
-    void deleteSport(Long id);
+    void deleteSport(int id);
     
     Sport findByName(String name);
 

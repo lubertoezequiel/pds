@@ -1,71 +1,61 @@
 package com.g4.tp.model.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.Embeddable;
 
-@Entity
-@Table(name = "locations")
+@Embeddable
 public class Location {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long id;
+
+    private Double latitude;
+    private Double longitude;
     private String address;
-    private String city;
-    private String zone;
-    private String postalCode;
 
     public Location() {
+        this.latitude = 0.0;
+        this.longitude = 0.0;
     }
-
-    public Location(String address, String city, String zone, String postalCode) {
-        this.address = address;
-        this.city = city;
-        this.zone = zone;
-        this.postalCode = postalCode;
+    public Location(Double latitude, Double longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
+        public boolean isWithinRadius(Location other, double radiusKm) {
+        double earthRadius = 6371.0; // Radio de la Tierra en kilómetros
 
-    // Getters and Setters
-    public Long getId() {
-        return id;
+        double lat1 = Math.toRadians(this.latitude);
+        double lon1 = Math.toRadians(this.longitude);
+        double lat2 = Math.toRadians(other.getLatitude());
+        double lon2 = Math.toRadians(other.getLongitude());
+
+        double dlat = lat2 - lat1;
+        double dlon = lon2 - lon1;
+
+        double a = Math.sin(dlat / 2) * Math.sin(dlat / 2)
+                 + Math.cos(lat1) * Math.cos(lat2)
+                 * Math.sin(dlon / 2) * Math.sin(dlon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        double distance = earthRadius * c;
+
+        return distance <= radiusKm;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    public Double getLatitude() {
+        return latitude;
     }
-
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+    public Double getLongitude() {
+        return longitude;
+    }
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
     public String getAddress() {
         return address;
     }
-
     public void setAddress(String address) {
         this.address = address;
     }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getZone() {
-        return zone;
-    }
-
-    public void setZone(String zone) {
-        this.zone = zone;
-    }
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
+    
 }
