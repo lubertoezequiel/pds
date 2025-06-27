@@ -17,6 +17,10 @@ public class Sport {
     private String description;
     private int requiredPlayers;
 
+    public Sport() {
+        // Default constructor for JPA
+    }
+
     public Sport(String name, String description, int requiredPlayers) {
 
         this.name = name;

@@ -2,18 +2,21 @@ package com.g4.tp.model.state;
 
 import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.User;
+import com.g4.tp.model.entities.Sport;
 
 public class NeedPlayerState implements IMatchState {
 
     @Override
     public void cancel(Match match) {
-        // TODO: Transición a CancelledState
+        match.setState(new CancelledState());
     }
 
     @Override
     public void joinUser(User user, Match match) {
-        // TODO: Agregar usuario al partido
-        // TODO: Si se completa, transición a MatchArranged
+        match.getPlayers().add(user);
+        if (match.getPlayers().size() >= match.getSport().getRequiredPlayers()) {
+            match.setState(new ConfirmedState());
+        }
     }
 
     @Override

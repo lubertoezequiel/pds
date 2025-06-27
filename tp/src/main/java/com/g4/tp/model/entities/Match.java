@@ -1,14 +1,20 @@
 package com.g4.tp.model.entities;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.g4.tp.model.state.IMatchState;
 import com.g4.tp.model.strategy.IMatchingStrategy;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -18,25 +24,42 @@ import jakarta.persistence.Transient;
 public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
-    private String sport;
+
+    private Sport sport;
     private int duration;
     private LocalDateTime date;
     private LocalDateTime time;
+
+    @Embedded
+    private Location location;
+
+    @ManyToMany
+    @JoinTable(
+        name = "match_players",
+        joinColumns = @JoinColumn(name = "match_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<User> players = new ArrayList<>();
+
     @Transient
     private IMatchState state;
+
     @Transient
     private IMatchingStrategy matchingStrategy;
-    // TODO: Implementar patrón State más adelante
+    
+    public Match() {
+        this.date = LocalDateTime.now();
+        this.duration = 0;
+        this.id = null;
+        this.matchingStrategy = null;
+        this.sport = null;
+        this.state = null;
+        this.time = LocalDateTime.now();
+    }
 
-    // TODO: Agregar relaciones con User (players), Location, etc.
-    // TODO: Implementar IMatchingStrategy
-    // TODO: Implementar Observer pattern para notificaciones
 
-
-
-    public Match(String sport, int duration, LocalDateTime date, LocalDateTime time) {
+    public Match(Sport sport, int duration, LocalDateTime date, LocalDateTime time) {
         this.date = date;
         this.duration = duration;
         this.id = id;
@@ -54,11 +77,11 @@ public class Match {
         this.id = id;
     }
 
-    public String getSport() {
+    public Sport getSport() {
         return sport;
     }
 
-    public void setSport(String sport) {
+    public void setSport(Sport sport) {
         this.sport = sport;
     }
 
@@ -86,6 +109,32 @@ public class Match {
         this.time = time;
     }
 
-
+    public IMatchState getState() {
+        return state;
+    }
+    public void setState(IMatchState state) {
+        this.state = state;
+    }
+    public IMatchingStrategy getMatchingStrategy() {
+        return matchingStrategy;
+    }
+    public void setMatchingStrategy(IMatchingStrategy matchingStrategy) {
+        this.matchingStrategy = matchingStrategy;
+    }
+    public Location getLocation() {
+        return location;
+    }
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+    public List<User> getPlayers() {
+        return players;
+    }
+    public void setPlayers(List<User> players) {
+        this.players = players;
+    }
+    public void addPlayer(User user) {
+        this.players.add(user);
+    }
 
 }
