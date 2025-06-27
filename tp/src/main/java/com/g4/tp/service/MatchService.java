@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.g4.tp.model.entities.Location;
 import com.g4.tp.model.entities.Match;
-import com.g4.tp.model.entities.SkillLevelEnum;
+import com.g4.tp.model.entities.SKILL_LEVEL_ENUM;
 import com.g4.tp.model.entities.Sport;
 import com.g4.tp.model.entities.User;
 import com.g4.tp.model.state.IMatchState;
@@ -184,15 +184,15 @@ public class MatchService implements IMatchService {
     }
 
     @Override
-    public List<Match> getMatchesBySkillLevel(SkillLevelEnum minSkillLevel,
-            SkillLevelEnum maxSkillLevel) {
+    public List<Match> getMatchesBySkillLevel(SKILL_LEVEL_ENUM minSkillLevel,
+            SKILL_LEVEL_ENUM maxSkillLevel) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getMatchesBySkillLevel'");
     }
 
     @Override
-    public List<Match> getMatchesBySportAndSkillLevel(Sport sport, SkillLevelEnum minSkillLevel,
-            SkillLevelEnum maxSkillLevel) {
+    public List<Match> getMatchesBySportAndSkillLevel(Sport sport, SKILL_LEVEL_ENUM minSkillLevel,
+            SKILL_LEVEL_ENUM maxSkillLevel) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getMatchesBySportAndSkillLevel'");
     }

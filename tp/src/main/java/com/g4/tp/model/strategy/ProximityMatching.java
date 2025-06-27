@@ -5,17 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.User;
 
+@Component
 public class ProximityMatching implements IMatchingStrategy {
 
-    private double maxDistance;
+    private double maxDistance = 5.0; // Distancia máxima en kilómetros
 
-    public ProximityMatching(double maxDistance) {
-        this.maxDistance = maxDistance;
+    public ProximityMatching() {
+       
     }
-
+    @Override
+    public String getName() {
+        return "Proximity";
+    }
     @Override
     public List<User> matchPlayers(List<User> availableUsers, Match match) {
         if (availableUsers == null || availableUsers.isEmpty()) {

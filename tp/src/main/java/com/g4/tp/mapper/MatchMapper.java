@@ -10,6 +10,9 @@ import com.g4.tp.DTOs.MatchDTO;
 import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.Sport;
 import com.g4.tp.model.entities.User;
+import com.g4.tp.model.strategy.HistoryMatching;
+import com.g4.tp.model.strategy.ProximityMatching;
+import com.g4.tp.model.strategy.SkillLevelMatching;
 import com.g4.tp.service.ISportService;
 import com.g4.tp.service.IUserService;
 
@@ -24,6 +27,9 @@ public class MatchMapper {
     @Autowired
     private IUserService userService;
 
+    @Autowired private ProximityMatching proximityStrategy;
+    @Autowired private SkillLevelMatching skillLevelStrategy;
+    @Autowired private HistoryMatching historyStrategy;
 
 
     public  Match convertToEntity(MatchDTO matchDTO) {
@@ -45,6 +51,7 @@ public class MatchMapper {
         match.setTime(matchDTO.getTime());
         match.setLocation(locationMapper.convertToLocationEntity(matchDTO.getLocation()));
 
+
             // Buscar y asignar jugadores
     
         if (matchDTO.getIdPlayers() != null) {
@@ -56,7 +63,21 @@ public class MatchMapper {
                 throw new IllegalArgumentException("User not found with ID: " + playerId);
             }
         }
-    }
+
+                // Seteamos la estrategia según el string
+        if (matchDTO.getStrategy() != null) {
+            switch (matchDTO.getStrategy().toUpperCase()) {
+                case "PROXIMITY" -> match.setMatchingStrategy(proximityStrategy);
+                case "SKILLLEVEL" -> match.setMatchingStrategy(skillLevelStrategy);
+                case "HISTORY" -> match.setMatchingStrategy(historyStrategy);
+                default -> throw new IllegalArgumentException("Estrategia inválida: " + matchDTO.getStrategy());
+            }
+            System.out.println("Setting matching strategy: " + matchDTO.getStrategy());
+        }
+        } else {
+            throw new IllegalArgumentException("Match must have at least one player");
+        }   
+    
     match.setPlayers(players);
        
         return match;
@@ -71,6 +92,8 @@ public class MatchMapper {
         matchDTO.setDate(match.getDate());
         matchDTO.setTime(match.getTime());
         matchDTO.setIdPlayers(match.getPlayers().stream().mapToInt(User::getId).toArray());
+
+        matchDTO.setStrategy(match.getMatchingStrategy() != null ? match.getMatchingStrategy().getName() : null);
 
         
         return matchDTO;

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.g4.tp.model.entities.Location;
 import com.g4.tp.model.entities.Match;
-import com.g4.tp.model.entities.SkillLevelEnum;
+import com.g4.tp.model.entities.SKILL_LEVEL_ENUM;
 import com.g4.tp.model.entities.Sport;
 import com.g4.tp.model.entities.User;
 import com.g4.tp.model.state.IMatchState;
@@ -33,8 +33,8 @@ public interface IMatchService {
     void setMatchState(IMatchState state);
     IMatchState getMatchState(Match match);
     void changeMatchState(Match match, IMatchState newState);
-    List<Match> getMatchesBySkillLevel(SkillLevelEnum minSkillLevel, SkillLevelEnum maxSkillLevel);
-    List<Match> getMatchesBySportAndSkillLevel(Sport sport, SkillLevelEnum minSkillLevel, SkillLevelEnum maxSkillLevel);
+    List<Match> getMatchesBySkillLevel(SKILL_LEVEL_ENUM minSkillLevel, SKILL_LEVEL_ENUM maxSkillLevel);
+    List<Match> getMatchesBySportAndSkillLevel(Sport sport, SKILL_LEVEL_ENUM minSkillLevel, SKILL_LEVEL_ENUM maxSkillLevel);
     List<Match> getMatchesBySportAndLocation(Sport sport, Location location);
     List<Match> getMatchesByProximity(Location userLocation, double radius);
     List<Match> getMatchesByProximityByUserId(int userId, double radius);

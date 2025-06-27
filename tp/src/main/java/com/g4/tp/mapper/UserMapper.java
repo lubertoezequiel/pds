@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.g4.tp.DTOs.UserDTO;
 import com.g4.tp.model.entities.Location;
-import com.g4.tp.model.entities.SkillLevelEnum;
+import com.g4.tp.model.entities.SKILL_LEVEL_ENUM;
 import com.g4.tp.model.entities.Sport;
 import com.g4.tp.model.entities.User;
 import com.g4.tp.service.ISportService;
@@ -47,7 +47,7 @@ public class UserMapper {
 
     // Skill level
     if (user.getSkillLevel() != null) {
-        dto.setSkillLevel(user.getSkillLevel().name());
+        dto.setSkillLevel(user.getSkillLevel().toString());
     }
 
     return dto;
@@ -65,7 +65,7 @@ public class UserMapper {
         }
         Sport favoriteSport = sportService.getSportById(dto.getFavoriteSportId());
 
-        SkillLevelEnum skillLevel = SkillLevelEnum.valueOf(dto.getSkillLevel().toUpperCase());
+        SKILL_LEVEL_ENUM skillLevel = SKILL_LEVEL_ENUM.valueOf(dto.getSkillLevel().toUpperCase());
         Location location = new Location();
         location.setLatitude(dto.getLatitude());
         location.setLongitude(dto.getLongitude());

@@ -5,18 +5,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.g4.tp.model.entities.Match;
-import com.g4.tp.model.entities.SkillLevelEnum;
-import com.g4.tp.model.entities.User;
+import org.springframework.stereotype.Component;
 
+import com.g4.tp.model.entities.Match;
+import com.g4.tp.model.entities.SKILL_LEVEL_ENUM;
+import static com.g4.tp.model.entities.SKILL_LEVEL_ENUM.ADVANCED;
+import static com.g4.tp.model.entities.SKILL_LEVEL_ENUM.BEGINNER;
+import com.g4.tp.model.entities.User;
+@Component
 public class SkillLevelMatching implements IMatchingStrategy {
 
-    private SkillLevelEnum minSkillLevel;
-    private SkillLevelEnum maxSkillLevel;
+    private SKILL_LEVEL_ENUM min = BEGINNER;
+    private SKILL_LEVEL_ENUM max = ADVANCED;
 
-    public SkillLevelMatching(SkillLevelEnum minSkillLevel, SkillLevelEnum maxSkillLevel) {
-        this.minSkillLevel = minSkillLevel;
-        this.maxSkillLevel = maxSkillLevel;
+    public SkillLevelMatching() {
+  
+    }
+
+    @Override
+    public String getName() {
+        return "SkillLevel";
     }
 
     @Override
@@ -45,26 +53,26 @@ public class SkillLevelMatching implements IMatchingStrategy {
                 .collect(Collectors.toList());
     }
 
-    private boolean isSkillLevelWithinRange(SkillLevelEnum userSkillLevel) {
-        return userSkillLevel.ordinal() >= minSkillLevel.ordinal() && 
-               userSkillLevel.ordinal() <= maxSkillLevel.ordinal();
+    private boolean isSkillLevelWithinRange(SKILL_LEVEL_ENUM userSkillLevel) {
+        return userSkillLevel.ordinal() >= min.ordinal() && 
+               userSkillLevel.ordinal() <= max.ordinal();
     }
 
     // Getters and Setters
-    public SkillLevelEnum getMinSkillLevel() {
-        return minSkillLevel;
+    public SKILL_LEVEL_ENUM getMinSkillLevel() {
+        return min;
     }
 
-    public void setMinSkillLevel(SkillLevelEnum minSkillLevel) {
-        this.minSkillLevel = minSkillLevel;
+    public void setMinSkillLevel(SKILL_LEVEL_ENUM minSkillLevel) {
+        this.min = minSkillLevel;
     }
 
-    public SkillLevelEnum getMaxSkillLevel() {
-        return maxSkillLevel;
+    public SKILL_LEVEL_ENUM getMaxSkillLevel() {
+        return max;
     }
 
-    public void setMaxSkillLevel(SkillLevelEnum maxSkillLevel) {
-        this.maxSkillLevel = maxSkillLevel;
+    public void setMaxSkillLevel(SKILL_LEVEL_ENUM maxSkillLevel) {
+        this.max = maxSkillLevel;
     }  
 
 

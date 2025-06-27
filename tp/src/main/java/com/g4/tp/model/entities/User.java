@@ -40,7 +40,7 @@ public class User {
     private Sport favoriteSport;
 
     @Enumerated(EnumType.STRING)
-    private SkillLevelEnum skillLevel;
+    private SKILL_LEVEL_ENUM skillLevel;
 
     public User() {}
 
@@ -99,11 +99,11 @@ public class User {
         this.favoriteSport = favoriteSport;
     }
 
-    public SkillLevelEnum getSkillLevel() {
+    public SKILL_LEVEL_ENUM getSkillLevel() {
         return skillLevel;
     }
 
-    public void setSkillLevel(SkillLevelEnum skillLevel) {
+    public void setSkillLevel(SKILL_LEVEL_ENUM skillLevel) {
         this.skillLevel = skillLevel;
     }
     public Location getLocation() {

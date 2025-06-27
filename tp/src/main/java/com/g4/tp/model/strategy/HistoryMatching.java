@@ -1,15 +1,23 @@
 package com.g4.tp.model.strategy;
 
 import java.util.List;
-import com.g4.tp.model.entities.User;
-import com.g4.tp.model.entities.Match;
 
+import org.springframework.stereotype.Component;
+
+import com.g4.tp.model.entities.Match;
+import com.g4.tp.model.entities.User;
+
+@Component
 public class HistoryMatching implements IMatchingStrategy {
 
-    private int minMatchesPlayed;
+    private int minMatchesPlayed = 5;
 
-    public HistoryMatching(int minMatchesPlayed) {
-        this.minMatchesPlayed = minMatchesPlayed;
+    public HistoryMatching() {
+   
+    }
+       @Override
+    public String getName() {
+        return "History";
     }
 
     @Override

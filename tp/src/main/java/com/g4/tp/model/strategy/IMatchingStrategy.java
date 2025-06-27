@@ -6,7 +6,7 @@ import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.User;
 
 public interface IMatchingStrategy {
-
+    String getName();
     List<User> matchPlayers(List<User> availableUsers, Match match);
 
 }

@@ -11,6 +11,7 @@ public class MatchDTO {
     private LocalDateTime time;
     private int [] idPlayers;
     private LocationDTO location;
+    private String strategy;
 
 
     public MatchDTO(int sport, int duration, LocalDateTime date, LocalDateTime time) {
@@ -71,4 +72,10 @@ public class MatchDTO {
     public void setLocation(LocationDTO location) {
         this.location = location;
     }    
+    public String getStrategy() {
+        return strategy;
+    }
+    public void setStrategy(String strategy) {
+        this.strategy = strategy;
+    }
 }
