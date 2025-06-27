@@ -2,14 +2,16 @@ package com.g4.tp.model.entities;
 
 import java.time.LocalDateTime;
 
-import com.g4.tp.model.interfaces.IMatchState;
-import com.g4.tp.model.interfaces.IMatchingStrategy;
+import com.g4.tp.model.state.IMatchState;
+import com.g4.tp.model.strategy.IMatchingStrategy;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
 
 @Entity
 @Table(name = "matches")
@@ -22,7 +24,9 @@ public class Match {
     private int duration;
     private LocalDateTime date;
     private LocalDateTime time;
+    @Transient
     private IMatchState state;
+    @Transient
     private IMatchingStrategy matchingStrategy;
     // TODO: Implementar patrón State más adelante
 

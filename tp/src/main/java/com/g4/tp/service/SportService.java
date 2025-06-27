@@ -7,15 +7,17 @@ import com.g4.tp.model.entities.Sport;
 import com.g4.tp.repository.ISportRepository;
 
 @Service
-public class SportService {
+public class SportService{
     // Business logic related to Sport
     @Autowired
     private ISportRepository sportRepository;
 
     public Sport createSport(Sport sport) {
-        System.out.println("Creating sport: " + sport.getName() +
-                " with description: " + sport.getDescription() +
-                " and required players: " + sport.getRequiredPlayers());
+
+        if (sportRepository.findByName(sport.getName()) != null) {
+            throw new RuntimeException("Sport already exists with name: " + sport.getName());
+        }
+        
         // Here you can add any business logic before saving the sport
         return sportRepository.save(sport);
     }

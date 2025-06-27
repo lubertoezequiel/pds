@@ -4,22 +4,11 @@ import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.User;
 
 public interface IMatchState {
+   
+    public void cancel(Match match);
+    public void joinUser(User user, Match match);
+    public void finishMatch(Match match);
+    public void confirmMatch(Match match);
+    public void updateProgress(Match match, int progress);
 
-    void cancel(Match match);
-
-    void joinUser(User user, Match match);
-
-    void finishMatch(Match match);
-
-    void confirmMatch(Match match);
-
-    void updateProgress(Match match, int progress);
-
-    // TODO: Implementar los siguientes estados:
-    // - NeedPlayerState
-    // - MatchArranged
-    // - ConfirmedState
-    // - InProgressState
-    // - FinishedState
-    // - CancelledState
 }

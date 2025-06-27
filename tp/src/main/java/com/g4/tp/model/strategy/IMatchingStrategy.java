@@ -1,4 +1,4 @@
-package com.g4.tp.model.interfaces;
+package com.g4.tp.model.strategy;
 
 import java.util.List;
 

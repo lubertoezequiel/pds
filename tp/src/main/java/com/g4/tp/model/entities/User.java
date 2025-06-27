@@ -9,6 +9,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "users")
 public class User {
+    
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -16,6 +18,9 @@ public class User {
     private String name;
     private String email;
     private String password;
+
+     public User() {
+    }
 
     public User(String name, String email, String password) {
 

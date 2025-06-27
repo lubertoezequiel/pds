@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.g4.tp.model.entities.User;
 
 public interface IUserRepository extends JpaRepository<User, Long> {
-    User findByName(String name);
-
+    User findByEmail(String email);
 }
