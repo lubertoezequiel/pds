@@ -2,6 +2,7 @@ package com.g4.tp.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.SKILL_LEVEL_ENUM;
 import com.g4.tp.model.entities.Sport;
 import com.g4.tp.model.entities.User;
+import com.g4.tp.model.state.ConfirmedState;
 import com.g4.tp.model.state.IMatchState;
+import com.g4.tp.model.state.MatchArranged;
 import com.g4.tp.model.strategy.IMatchingStrategy;
 import com.g4.tp.repository.IMatchRepository;
 
@@ -116,14 +119,24 @@ public class MatchService implements IMatchService {
         if (match.getPlayers().contains(user)) {
             throw new IllegalArgumentException("User already joined the match.");
         }
-
-        // Validación de máximo jugadores (opcional)
-        int maxPlayers = match.getSport().getRequiredPlayers(); 
-        if (match.getPlayers().size() >= maxPlayers) {
-            throw new IllegalStateException("Match is already full.");
-        }
-
         match.addPlayer(user);
+        // Validación de máximo jugadores (opcional)
+      
+        if (match.getPlayers().size() >= match.getSport().getRequiredPlayers()){
+            match.setState(new MatchArranged());
+            matchRepository.save(match); 
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("¿Confirmar partido? (y/n): ");
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("y")) {
+                System.out.println("✅ Partido confirmado.");
+                match.setState(new ConfirmedState());
+            } else {
+                System.out.println("Confirmación cancelada.");
+                match.setState(match.getState()); // Mantiene el estado actual
+            }
+
+        }
         matchRepository.save(match);
     
     }

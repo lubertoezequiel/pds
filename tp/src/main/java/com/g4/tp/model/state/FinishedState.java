@@ -34,4 +34,9 @@ public class FinishedState implements IMatchState {
         // No se puede actualizar progreso de un partido finalizado
         throw new IllegalStateException("Cannot update progress of finished match");
     }
+
+    @Override
+    public String getStateName() {
+        return "Finished";
+    }
 }

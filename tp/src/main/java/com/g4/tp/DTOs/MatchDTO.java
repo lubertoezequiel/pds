@@ -12,7 +12,7 @@ public class MatchDTO {
     private int [] idPlayers;
     private LocationDTO location;
     private String strategy;
-
+    private String state;
 
     public MatchDTO(int sport, int duration, LocalDateTime date, LocalDateTime time) {
 
@@ -77,5 +77,11 @@ public class MatchDTO {
     }
     public void setStrategy(String strategy) {
         this.strategy = strategy;
+    }
+    public String getState() {
+        return state;
+    }
+    public void setState(String state) {
+        this.state = state;
     }
 }

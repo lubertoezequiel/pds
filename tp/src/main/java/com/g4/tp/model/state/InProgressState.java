@@ -32,4 +32,9 @@ public class InProgressState implements IMatchState {
     public void updateProgress(Match match, int progress) {
         // TODO: Actualizar progreso del partido
     }
+
+    @Override
+    public String getStateName() {
+        return "InProgress";
+    }
 }

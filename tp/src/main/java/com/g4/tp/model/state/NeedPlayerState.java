@@ -4,7 +4,7 @@ import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.User;
 
 public class NeedPlayerState implements IMatchState {
-
+    
     @Override
     public void cancel(Match match) {
         match.setState(new CancelledState());
@@ -14,7 +14,7 @@ public class NeedPlayerState implements IMatchState {
     public void joinUser(User user, Match match) {
         match.getPlayers().add(user);
         if (match.getPlayers().size() >= match.getSport().getRequiredPlayers()) {
-            match.setState(new ConfirmedState());
+            match.setState(new MatchArranged());
         }
     }
 
@@ -34,4 +34,11 @@ public class NeedPlayerState implements IMatchState {
         // No se puede actualizar progreso en este estado
         throw new IllegalStateException("Cannot update progress in NeedPlayer state");
     }
+
+    @Override
+    public String getStateName() {
+        return "NeedPlayer";
+    }
+
+
 }

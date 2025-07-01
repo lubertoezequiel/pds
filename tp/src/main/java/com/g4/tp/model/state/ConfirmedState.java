@@ -31,4 +31,9 @@ public class ConfirmedState implements IMatchState {
     public void updateProgress(Match match, int progress) {
         // TODO: Transición a InProgressState cuando llegue la hora
     }
+
+    @Override
+    public String getStateName() {
+        return "Confirmed";
+    }
 }

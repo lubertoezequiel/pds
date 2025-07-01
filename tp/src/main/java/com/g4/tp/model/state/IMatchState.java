@@ -10,5 +10,6 @@ public interface IMatchState {
     public void finishMatch(Match match);
     public void confirmMatch(Match match);
     public void updateProgress(Match match, int progress);
+    public String getStateName();
 
 }

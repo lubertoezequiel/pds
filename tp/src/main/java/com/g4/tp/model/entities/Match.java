@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.g4.tp.model.state.IMatchState;
+import com.g4.tp.model.state.NeedPlayerState;
 import com.g4.tp.model.strategy.IMatchingStrategy;
 
 import jakarta.persistence.Embedded;
@@ -51,14 +52,18 @@ public class Match {
     @Transient
     private IMatchingStrategy matchingStrategy;
     
+    String stateTag;
+    
     public Match() {
         this.date = LocalDateTime.now();
         this.duration = 0;
         this.id = 0;
         this.matchingStrategy = null;
         this.sport = null;
-        this.state = null;
+        this.state = new NeedPlayerState();
         this.time = LocalDateTime.now();
+        this.state = new NeedPlayerState();
+        this.stateTag = this.state.getStateName();
     }
 
 
@@ -68,7 +73,8 @@ public class Match {
         this.id = id;
         this.matchingStrategy = matchingStrategy;
         this.sport = sport;
-        this.state = state;
+        this.state = new NeedPlayerState();
+        this.stateTag = this.state.getStateName();
         this.time = time;
     }
 
@@ -111,12 +117,13 @@ public class Match {
     public void setTime(LocalDateTime time) {
         this.time = time;
     }
-
     public IMatchState getState() {
-        return state;
+        return this.state;
     }
+
     public void setState(IMatchState state) {
         this.state = state;
+        this.stateTag = state.getStateName();
     }
     public IMatchingStrategy getMatchingStrategy() {
         return matchingStrategy;
@@ -139,5 +146,6 @@ public class Match {
     public void addPlayer(User user) {
         this.players.add(user);
     }
+ 
 
 }

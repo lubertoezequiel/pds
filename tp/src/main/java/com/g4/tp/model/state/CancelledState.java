@@ -34,4 +34,9 @@ public class CancelledState implements IMatchState {
         // No se puede actualizar progreso de un partido cancelado
         throw new IllegalStateException("Cannot update progress of cancelled match");
     }
+
+    @Override
+    public String getStateName() {
+        return "Cancelled";
+    }
 }

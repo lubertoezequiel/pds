@@ -77,6 +77,8 @@ public class MatchMapper {
         } else {
             throw new IllegalArgumentException("Match must have at least one player");
         }   
+
+
     
     match.setPlayers(players);
        
@@ -92,9 +94,8 @@ public class MatchMapper {
         matchDTO.setDate(match.getDate());
         matchDTO.setTime(match.getTime());
         matchDTO.setIdPlayers(match.getPlayers().stream().mapToInt(User::getId).toArray());
-
         matchDTO.setStrategy(match.getMatchingStrategy() != null ? match.getMatchingStrategy().getName() : null);
-
+        matchDTO.setState(match.getState().getStateName());
         
         return matchDTO;
     }
