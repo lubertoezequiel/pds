@@ -1,7 +1,9 @@
 package com.g4.tp.model.entities;
 
 import java.util.List;
+import java.util.Objects;
 
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,14 +27,12 @@ public class User {
     private String name;
     private String email;
     private String password;
+
+    @Embedded // AGREGADO: Anotación faltante
     private Location location;
 
     @ManyToMany
-    @JoinTable(
-        name = "user_practiced_sports",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "sport_id")
-    )
+    @JoinTable(name = "user_practiced_sports", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "sport_id"))
     private List<Sport> practicedSports;
 
     @ManyToOne
@@ -42,12 +42,29 @@ public class User {
     @Enumerated(EnumType.STRING)
     private SKILL_LEVEL_ENUM skillLevel;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    // AGREGADO: Métodos equals y hashCode para comparaciones en listas
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        User user = (User) obj;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     // Getters y setters
@@ -106,9 +123,11 @@ public class User {
     public void setSkillLevel(SKILL_LEVEL_ENUM skillLevel) {
         this.skillLevel = skillLevel;
     }
+
     public Location getLocation() {
         return location;
     }
+
     public void setLocation(Location location) {
         this.location = location;
     }

@@ -1,39 +1,46 @@
 package com.g4.tp.model.state;
 
-import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.User;
+import java.time.LocalDateTime;
 
 public class ConfirmedState implements IMatchState {
 
     @Override
-    public void cancel(Match match) {
-        // TODO: Transición a CancelledState
+    public void cancel(MatchContext context) {
+        context.setCurrentState(new CancelledState());
     }
 
     @Override
-    public void joinUser(User user, Match match) {
-        // Ya está confirmado el partido
+    public void joinUser(User user, MatchContext context) {
         throw new IllegalStateException("Cannot join user, match is confirmed");
     }
 
     @Override
-    public void finishMatch(Match match) {
-        // TODO: Transición a FinishedState
+    public void finishMatch(MatchContext context) {
+        context.setCurrentState(new FinishedState());
     }
 
     @Override
-    public void confirmMatch(Match match) {
-        // Ya está confirmado
+    public void confirmMatch(MatchContext context) {
         throw new IllegalStateException("Match is already confirmed");
     }
 
     @Override
-    public void updateProgress(Match match, int progress) {
-        // TODO: Transición a InProgressState cuando llegue la hora
+    public void updateProgress(MatchContext context, int progress) {
+        // MEJORADO: Validar si realmente es hora del partido
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime matchTime = context.getMatch().getTime();
+
+        // Solo transicionar si ha llegado la hora del partido (con margen de 15
+        // minutos)
+        if (now.isAfter(matchTime.minusMinutes(15))) {
+            context.setCurrentState(new InProgressState());
+        }
+        // Si no, simplemente actualizar el progreso sin cambiar estado
     }
 
     @Override
     public String getStateName() {
-        return "Confirmed";
+        return "Confirmado";
     }
 }
