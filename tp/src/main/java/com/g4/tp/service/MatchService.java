@@ -18,10 +18,9 @@ import com.g4.tp.model.state.MatchStateEnum;
 import com.g4.tp.model.state.StateFactory;
 import com.g4.tp.repository.IMatchRepository;
 
-
 @Service
 public class MatchService implements IMatchService {
-    
+
     @Autowired
     private IMatchRepository matchRepository;
     @Autowired
@@ -31,36 +30,40 @@ public class MatchService implements IMatchService {
 
     @Override
     public Match createMatch(Match match) {
-    
+
         if (match == null) {
-          throw new IllegalArgumentException("Match cannot be null");
+            throw new IllegalArgumentException("Match cannot be null");
         }
-      
+
         if (match.getSport() == null) {
-          throw new IllegalArgumentException("Match must have a sport associated");
+            throw new IllegalArgumentException("Match must have a sport associated");
         }
-      
+
         if (match.getLocation() == null) {
             throw new IllegalArgumentException("Match must have a location associated");
-        } 
-        
-        Sport sport = sportService.getSportById(match.getSport().getId()); 
-        
-        if (match.getParticipants() == null || match.getParticipants().isEmpty() || match.getParticipants().size() > sport.getRequiredPlayers()) {
+        }
+
+        Sport sport = sportService.getSportById(match.getSport().getId());
+
+        if (match.getParticipants().size() > sport.getRequiredPlayers()) {
             throw new IllegalArgumentException("Quantity of players error ");
-        } 
+        }
+        List<User> usuarios = userService.findAll();
+        match.add(usuarios);
         
-        Match createdMatch =matchRepository.save(match); // el ID ya se setea en el objeto
-        System.out.println("Match created with ID: " + createdMatch.getId() );
+        MatchContext matchContext = new MatchContext(match);
+        matchContext.needPlayer();
+
+        Match createdMatch = matchRepository.save(match); // el ID ya se setea en el objeto
+        System.out.println("Match created with ID: " + createdMatch.getId());
         return createdMatch;
 
     }
-    
 
     @Override
     public Match getMatchById(int id) {
         Match match = matchRepository.findById(id).orElse(null);
-        
+
         if (match == null) {
             throw new IllegalArgumentException("Match not found with ID: " + id);
         }
@@ -71,9 +74,9 @@ public class MatchService implements IMatchService {
     @Override
     public Match joinMatch(int userId, int matchId) {
         Match match = matchRepository.findById(matchId)
-            .orElseThrow(() -> new IllegalArgumentException("Match not found with ID: " + matchId));
+                .orElseThrow(() -> new IllegalArgumentException("Match not found with ID: " + matchId));
 
-        User user = userService.getUserById(userId);    
+        User user = userService.getUserById(userId);
         //Valido que el usuario ya no este agregado al partido
         if (match.getParticipants().stream()
                 .anyMatch(participant -> participant.getUser().getId() == userId)) {
@@ -83,15 +86,14 @@ public class MatchService implements IMatchService {
         matchContext.joinUser(user); // Cambia el estado del partido a "Necesitamos jugadores"
         return matchRepository.save(match); // Guardar el estado actualizado del partido
         // Validación de máximo jugadores (opcional)
-      
-    
+
     }
 
     @Override
     public Match cancelMatch(int matchId) {
         Match match = matchRepository.findById(matchId)
-            .orElseThrow(() -> new IllegalArgumentException("Match not found with ID: " + matchId));
-        
+                .orElseThrow(() -> new IllegalArgumentException("Match not found with ID: " + matchId));
+
         MatchContext matchContext = new MatchContext(match);
         matchContext.cancel();
 
@@ -104,34 +106,33 @@ public class MatchService implements IMatchService {
         if (user == null || user.getLocation() == null) {
             throw new IllegalArgumentException("User not found or user location is null");
         }
-        
+
         return getMatchesByProximity(user.getLocation(), radius);
-    
-    }    
+
+    }
 
     @Override
     public List<Match> getMatchesByProximity(Location userLocation, double radius) {
         if (userLocation == null) {
             throw new IllegalArgumentException("User location cannot be null");
         }
-        
+
         if (radius <= 0) {
             throw new IllegalArgumentException("Radius must be greater than zero");
         }
-        
+
         List<Match> allMatches = matchRepository.findAll();
         return allMatches.stream()
-                .filter(match -> match.getLocation() != null && 
-                                 match.getLocation().isWithinRadius(userLocation, radius))
+                .filter(match -> match.getLocation() != null
+                && match.getLocation().isWithinRadius(userLocation, radius))
                 .collect(Collectors.toList());
-        
-    }
 
+    }
 
     @Override
     public Match acceptParticipation(int matchId, int userId) {
-    Match match = matchRepository.findById(matchId)
-            .orElseThrow(() -> new IllegalArgumentException("Match not found with ID: " + matchId));
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new IllegalArgumentException("Match not found with ID: " + matchId));
 
         User user = userService.getUserById(userId);
         if (user == null) {
@@ -139,7 +140,7 @@ public class MatchService implements IMatchService {
         }
 
         // Check if the user is already a participant
-        List <Participant> participant = match.getParticipants();
+        List<Participant> participant = match.getParticipants();
 
         if (participant == null) {
             throw new IllegalArgumentException("No participants found for this match.");
@@ -151,7 +152,7 @@ public class MatchService implements IMatchService {
                 } else {
                     throw new IllegalArgumentException("User already accepted participation in this match.");
                 }
-            
+
             }
         }
 
@@ -159,28 +160,26 @@ public class MatchService implements IMatchService {
         matchContext.confirmMatch();
 
         return matchRepository.save(match);
-    }   
-    
-    
+    }
+
     @Scheduled(fixedRate = 60000) // cada 60 segundos
     public void updateMatchStates() {
 
         List<MatchStateEnum> estados = List.of(
-        MatchStateEnum.NEED_PLAYER,
-        MatchStateEnum.MATCH_ARRANGED,
-        MatchStateEnum.CONFIRMED,
-        MatchStateEnum.IN_PROGRESS
+                MatchStateEnum.NEED_PLAYER,
+                MatchStateEnum.MATCH_ARRANGED,
+                MatchStateEnum.CONFIRMED,
+                MatchStateEnum.IN_PROGRESS
         );
 
         List<Match> matches = matchRepository.findAllByStateEnumIn(estados);
 
-        for(Match match : matches){
+        for (Match match : matches) {
             MatchContext context = new MatchContext(match);
             context.setCurrentState(StateFactory.createState(match.getStateEnum()));
             context.updateProgress();
             matchRepository.save(context.getMatch());
         }
-
 
     }
 }

@@ -16,4 +16,6 @@ public interface IMatchState {
 
     public String getStateName();
 
+    public void needPlayer(MatchContext matchContext);
+
 }

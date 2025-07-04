@@ -10,13 +10,14 @@ import org.springframework.stereotype.Component;
 import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.SKILL_LEVEL_ENUM;
 import static com.g4.tp.model.entities.SKILL_LEVEL_ENUM.ADVANCED;
-import static com.g4.tp.model.entities.SKILL_LEVEL_ENUM.BEGINNER;
+import static com.g4.tp.model.entities.SKILL_LEVEL_ENUM.INTERMEDIATE;
 import com.g4.tp.model.entities.User;
 @Component
 public class SkillLevelMatching implements IMatchingStrategy {
 
-    private SKILL_LEVEL_ENUM min = BEGINNER;
+    private SKILL_LEVEL_ENUM min = INTERMEDIATE;
     private SKILL_LEVEL_ENUM max = ADVANCED;
+    private boolean enableBalancing = true;
 
     public SkillLevelMatching() {
   
@@ -79,5 +80,14 @@ public class SkillLevelMatching implements IMatchingStrategy {
     public List<User> matchPlayers(List<User> availableUsers) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'matchPlayers'");
+    }
+
+    @Override
+    public boolean isApplicable(Match match) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isApplicable'");
+    }
+    public void setEnableBalancing(boolean enableBalancing) {
+        this.enableBalancing = enableBalancing;
     }
 }

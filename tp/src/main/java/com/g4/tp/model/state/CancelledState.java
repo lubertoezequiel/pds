@@ -33,4 +33,10 @@ public class CancelledState implements IMatchState {
     public String getStateName() {
         return "Cancelado";
     }
+
+    @Override
+    public void needPlayer(MatchContext matchContext) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'needPlayer'");
+    }
 }

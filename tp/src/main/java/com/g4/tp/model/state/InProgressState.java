@@ -30,12 +30,18 @@ public class InProgressState implements IMatchState {
     public void updateProgress(MatchContext context) {
         LocalDateTime now = LocalDateTime.now();
         if (now.isAfter(context.getMatch().getStartTime().plusMinutes(context.getMatch().getDuration()))) {
-            context.setCurrentState(new InProgressState());
+            context.setCurrentState(new FinishedState());
         }
     }
 
     @Override
     public String getStateName() {
         return "En juego";
+    }
+
+    @Override
+    public void needPlayer(MatchContext matchContext) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'needPlayer'");
     }
 }

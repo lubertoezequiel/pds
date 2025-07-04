@@ -8,13 +8,12 @@ import org.springframework.stereotype.Component;
 
 import com.g4.tp.DTOs.MatchDTO;
 import com.g4.tp.model.entities.Match;
-import static com.g4.tp.model.entities.PARTICIPATIONSTATUS.PENDING;
 import com.g4.tp.model.entities.Participant;
 import com.g4.tp.model.entities.Sport;
 import com.g4.tp.model.entities.User;
-import com.g4.tp.model.strategy.HistoryMatching;
 import com.g4.tp.model.strategy.ProximityMatching;
 import com.g4.tp.model.strategy.SkillLevelMatching;
+import com.g4.tp.model.strategy.StrategyFactory;
 import com.g4.tp.service.ISportService;
 import com.g4.tp.service.IUserService;
 
@@ -31,12 +30,12 @@ public class MatchMapper {
 
     @Autowired private ProximityMatching proximityStrategy;
     @Autowired private SkillLevelMatching skillLevelStrategy;
-    @Autowired private HistoryMatching historyStrategy;
 
 
     public  Match convertToEntity(MatchDTO matchDTO) {
         Match match = new Match();
         List<Participant> players = new ArrayList<>();
+        List <User> users=null; 
 
         Sport aux = sportService.getSportById(matchDTO.getSport());
 
@@ -55,39 +54,18 @@ public class MatchMapper {
 
             // Buscar y asignar jugadores
     
-        if (matchDTO.getIdPlayers() != null) {
-            for (int playerId : matchDTO.getIdPlayers()) {
-                User user = userService.getUserById(playerId);
-                
-                if (user != null) {
-                    players.add(new Participant(user, match, PENDING));
-                } else {
-                    throw new IllegalArgumentException("User not found with ID: " + playerId);
-                }
+        if (matchDTO.getIdPlayers().length>0) {
+            for (int playerId : matchDTO.getIdPlayers()) 
+                users.add(userService.getUserById(playerId));
             
-        }
-
-                // Seteamos la estrategia según el string
-        if (matchDTO.getStrategy() != null) {
-            switch (matchDTO.getStrategy().toUpperCase()) {
-                case "PROXIMITY" -> match.setMatchingStrategy(proximityStrategy);
-                case "SKILLLEVEL" -> match.setMatchingStrategy(skillLevelStrategy);
-                case "HISTORY" -> match.setMatchingStrategy(historyStrategy);
-                default -> throw new IllegalArgumentException("Estrategia inválida: " + matchDTO.getStrategy());
-            }
-            System.out.println("Setting matching strategy: " + matchDTO.getStrategy());
-        }
-        } else {
-            throw new IllegalArgumentException("Match must have at least one player");
-        }   
-
-
-    
-    match.setParticipant(players);
+            match.addParticipants(users);            
+        }    
+            match.setMatchingStrategy(StrategyFactory.createStrategy(matchDTO.getStrategy()));  
+            
        
+        
         return match;
-    }
-
+}
 
     public static MatchDTO convertToDTO(Match match) {
 

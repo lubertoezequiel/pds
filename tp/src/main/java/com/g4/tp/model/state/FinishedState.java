@@ -33,4 +33,10 @@ public class FinishedState implements IMatchState {
     public String getStateName() {
         return "Finalizado";
     }
+
+    @Override
+    public void needPlayer(MatchContext matchContext) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'needPlayer'");
+    }
 }

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.g4.tp.model.entities.PARTICIPATIONSTATUS.PENDING;
 import com.g4.tp.model.state.MatchStateEnum;
 import com.g4.tp.model.strategy.IMatchingStrategy;
 
@@ -130,12 +129,26 @@ public class Match {
         return players;
     }
 
-    public void setParticipant(List<Participant> players) {
-        this.players = players;
+    public void setParticipant() {
+
+        
     }
 
-    public void addPlayer(User player) {
-        Participant newParticipant = new Participant(player, this,PENDING);
+    public void addParticipants(List <User> players) {
+        
+        for (User user : players) {
+            Participant newParticipant = new Participant(user, this, PARTICIPATIONSTATUS.PENDING);
+            this.players.add(newParticipant);
+        }
+
+    }
+    public void addOneParticipant(User user){
+        Participant newParticipant = new Participant(user, this, PARTICIPATIONSTATUS.PENDING);
         this.players.add(newParticipant);
+    }
+
+    public void add(List <User> users){
+        this.addParticipants(matchingStrategy.matchPlayers(users, this));
+        
     }
 }

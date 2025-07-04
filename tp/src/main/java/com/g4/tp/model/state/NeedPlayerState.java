@@ -1,5 +1,7 @@
 package com.g4.tp.model.state;
 
+import java.time.LocalDateTime;
+
 import com.g4.tp.model.entities.User;
 
 public class NeedPlayerState implements IMatchState {
@@ -17,7 +19,7 @@ public class NeedPlayerState implements IMatchState {
             throw new IllegalStateException("El usuario ya está registrado en este partido");
         }
 
-        context.getMatch().addPlayer(user);
+        context.getMatch().addOneParticipant(user);
 
         // Transición automática cuando se alcanza el número requerido
         if (context.getMatch().getParticipants().size() >= context.getMatch().getSport().getRequiredPlayers()) {
@@ -37,11 +39,21 @@ public class NeedPlayerState implements IMatchState {
 
     @Override
     public void updateProgress(MatchContext context) {
-                context.setCurrentState(new CancelledState());
+       LocalDateTime now = LocalDateTime.now();
+
+        if(now.isAfter(context.getMatch().getStartTime()))
+            context.setCurrentState(new CancelledState());
     }
 
     @Override
     public String getStateName() {
         return "Necesitamos jugadores";
     }
+
+    @Override
+    public void needPlayer(MatchContext matchContext) {
+        if(matchContext.getMatch().getSport().getRequiredPlayers() == matchContext.getMatch().getParticipants().size()) 
+            matchContext.setCurrentState(new MatchArrangedState());
+        
+     }
 }

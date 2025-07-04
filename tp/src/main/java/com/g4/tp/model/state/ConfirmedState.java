@@ -43,4 +43,10 @@ public class ConfirmedState implements IMatchState {
     public String getStateName() {
         return "Confirmado";
     }
+
+    @Override
+    public void needPlayer(MatchContext matchContext) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'needPlayer'");
+    }
 }

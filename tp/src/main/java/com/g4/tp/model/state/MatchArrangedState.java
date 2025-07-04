@@ -51,4 +51,10 @@ public class MatchArrangedState implements IMatchState {
     public String getStateName() {
         return "Partido armado";
     }
+
+    @Override
+    public void needPlayer(MatchContext matchContext) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'needPlayer'");
+    }
 }

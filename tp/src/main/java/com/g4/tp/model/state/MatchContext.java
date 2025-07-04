@@ -40,6 +40,15 @@ public class MatchContext {
         this.match.setStateEnum(StateFactory.getEnumState(this.currentState));
     }
 
+    public void needPlayer(){
+        
+        
+        currentState.needPlayer(this);
+
+        
+        this.match.setStateEnum(StateFactory.getEnumState(this.currentState));
+    }
+
     public Match getMatch() {
         return match;
     }
