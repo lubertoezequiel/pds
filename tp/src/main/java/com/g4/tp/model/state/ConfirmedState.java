@@ -1,7 +1,8 @@
 package com.g4.tp.model.state;
 
-import com.g4.tp.model.entities.User;
 import java.time.LocalDateTime;
+
+import com.g4.tp.model.entities.User;
 
 public class ConfirmedState implements IMatchState {
 
@@ -26,14 +27,13 @@ public class ConfirmedState implements IMatchState {
     }
 
     @Override
-    public void updateProgress(MatchContext context, int progress) {
+    public void updateProgress(MatchContext context) {
         // MEJORADO: Validar si realmente es hora del partido
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime matchTime = context.getMatch().getTime();
 
         // Solo transicionar si ha llegado la hora del partido (con margen de 15
         // minutos)
-        if (now.isAfter(matchTime.minusMinutes(15))) {
+        if (now.isAfter(context.getMatch().getStartTime())) {
             context.setCurrentState(new InProgressState());
         }
         // Si no, simplemente actualizar el progreso sin cambiar estado

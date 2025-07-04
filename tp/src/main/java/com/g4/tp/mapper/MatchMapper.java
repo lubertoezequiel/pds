@@ -49,8 +49,7 @@ public class MatchMapper {
         }
         
         match.setDuration(matchDTO.getDuration());
-        match.setDate(matchDTO.getDate());
-        match.setTime(matchDTO.getTime());
+        match.setStartTime(matchDTO.getStartTime());
         match.setLocation(locationMapper.convertToLocationEntity(matchDTO.getLocation()));
 
 
@@ -92,11 +91,7 @@ public class MatchMapper {
 
     public static MatchDTO convertToDTO(Match match) {
 
-        MatchDTO matchDTO = new MatchDTO(match.getSport().getId(), match.getDuration(), match.getDate(), match.getTime());
-        matchDTO.setId(match.getId());
-        matchDTO.setDuration(match.getDuration());
-        matchDTO.setDate(match.getDate());
-        matchDTO.setTime(match.getTime());
+        MatchDTO matchDTO = new MatchDTO(match.getSport().getId(), match.getDuration(), match.getStartTime()); 
         matchDTO.setIdPlayers(match.getParticipants().stream()
                 .mapToInt(participant -> participant.getUser().getId())
                 .toArray());

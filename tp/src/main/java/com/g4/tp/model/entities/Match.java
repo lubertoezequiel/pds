@@ -34,8 +34,8 @@ public class Match {
     private Sport sport;
 
     private int duration;
-    private LocalDateTime date;
-    private LocalDateTime time;
+    private LocalDateTime startTime;
+
 
     @Embedded
     private Location location;
@@ -52,21 +52,21 @@ public class Match {
     private IMatchingStrategy matchingStrategy;
 
     public Match() {
-        this.date = LocalDateTime.now();
+
         this.duration = 0;
         this.matchingStrategy = null;
         this.sport = null;
         this.stateEnum = MatchStateEnum.NEED_PLAYER;
-        this.time = LocalDateTime.now();
+   
     }
 
     public Match(Sport sport, int duration, LocalDateTime date, LocalDateTime time) {
-        this.date = date;
+       
         this.duration = duration;
         this.matchingStrategy = null;
         this.sport = sport;
         this.stateEnum = MatchStateEnum.NEED_PLAYER;
-        this.time = time;
+        this.startTime = time;
     }
 
     // Getters y Setters
@@ -94,20 +94,12 @@ public class Match {
         this.duration = duration;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public void setStartTime(LocalDateTime start){
+        this.startTime= start; 
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public LocalDateTime getStartTime(){
+        return this.startTime;
     }
 
     public MatchStateEnum getStateEnum() {

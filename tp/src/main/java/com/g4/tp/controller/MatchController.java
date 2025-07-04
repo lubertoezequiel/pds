@@ -91,7 +91,7 @@ public class MatchController {
         }
     }
 
-    @PutMapping("/match/accept")
+    @PutMapping("/confirm")
     public ResponseEntity<?> acceptParticipation(@RequestParam("matchid") int matchId, @RequestParam("participantid") int participantId) {
         try {
             Match match = matchService.acceptParticipation(matchId, participantId);

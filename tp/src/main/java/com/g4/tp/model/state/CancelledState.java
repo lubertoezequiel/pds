@@ -1,6 +1,5 @@
 package com.g4.tp.model.state;
 
-import com.g4.tp.model.state.MatchContext;
 import com.g4.tp.model.entities.User;
 
 public class CancelledState implements IMatchState {
@@ -26,7 +25,7 @@ public class CancelledState implements IMatchState {
     }
 
     @Override
-    public void updateProgress(MatchContext context, int progress) {
+    public void updateProgress(MatchContext context) {
         throw new IllegalStateException("Cannot update progress of cancelled match");
     }
 

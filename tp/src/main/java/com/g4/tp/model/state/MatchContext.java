@@ -34,8 +34,8 @@ public class MatchContext {
         this.match.setStateEnum(StateFactory.getEnumState(this.currentState));
     }
 
-    public void updateProgress(int progress) {
-        currentState.updateProgress(this, progress);
+    public void updateProgress() {
+        currentState.updateProgress(this);
         // Actualizar el enum en la entidad Match
         this.match.setStateEnum(StateFactory.getEnumState(this.currentState));
     }

@@ -1,5 +1,7 @@
 package com.g4.tp.model.state;
 
+import java.time.LocalDateTime;
+
 import com.g4.tp.model.entities.PARTICIPATIONSTATUS;
 import com.g4.tp.model.entities.User;
 
@@ -38,8 +40,11 @@ public class MatchArrangedState implements IMatchState {
     }
 
     @Override
-    public void updateProgress(MatchContext context, int progress) {
-        throw new IllegalStateException("Cannot update progress in MatchArranged state");
+    public void updateProgress(MatchContext context) {
+        LocalDateTime now = LocalDateTime.now();
+
+        if(now.isAfter(context.getMatch().getStartTime()))
+            context.setCurrentState(new CancelledState());
     }
 
     @Override

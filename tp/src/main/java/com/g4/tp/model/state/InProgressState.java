@@ -1,6 +1,7 @@
 package com.g4.tp.model.state;
 
-import com.g4.tp.model.state.MatchContext;
+import java.time.LocalDateTime;
+
 import com.g4.tp.model.entities.User;
 
 public class InProgressState implements IMatchState {
@@ -26,9 +27,11 @@ public class InProgressState implements IMatchState {
     }
 
     @Override
-    public void updateProgress(MatchContext context, int progress) {
-        // Actualizar progreso del partido - lógica específica aquí
-        // Por ejemplo, actualizar tiempo transcurrido, marcador, etc.
+    public void updateProgress(MatchContext context) {
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(context.getMatch().getStartTime().plusMinutes(context.getMatch().getDuration()))) {
+            context.setCurrentState(new InProgressState());
+        }
     }
 
     @Override

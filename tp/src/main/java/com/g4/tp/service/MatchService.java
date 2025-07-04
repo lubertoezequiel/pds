@@ -1,6 +1,5 @@
 package com.g4.tp.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,16 +11,11 @@ import com.g4.tp.model.entities.Location;
 import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.PARTICIPATIONSTATUS;
 import com.g4.tp.model.entities.Participant;
-import com.g4.tp.model.entities.SKILL_LEVEL_ENUM;
 import com.g4.tp.model.entities.Sport;
 import com.g4.tp.model.entities.User;
-import com.g4.tp.model.state.CancelledState;
-import com.g4.tp.model.state.FinishedState;
-import com.g4.tp.model.state.IMatchState;
-import com.g4.tp.model.state.InProgressState;
 import com.g4.tp.model.state.MatchContext;
 import com.g4.tp.model.state.MatchStateEnum;
-import com.g4.tp.model.strategy.IMatchingStrategy;
+import com.g4.tp.model.state.StateFactory;
 import com.g4.tp.repository.IMatchRepository;
 
 
@@ -75,47 +69,6 @@ public class MatchService implements IMatchService {
     }
 
     @Override
-    public void updateMatch(int id, Match match) {
-
-    }
-
-    @Override
-    public void deleteMatch(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteMatch'");
-    }
-
-    @Override
-    public List<Match> getAllMatches() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllMatches'");
-    }
-
-    @Override
-    public List<Match> getMatchesByUser(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMatchesByUser'");
-    }
-
-    @Override
-    public List<Match> getMatchesBySport(Sport sport) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMatchesBySport'");
-    }
-
-    @Override
-    public List<Match> getMatchesByLocation(Location location) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMatchesByLocation'");
-    }
-
-    @Override
-    public List<Match> getMatchesByDate(LocalDateTime date) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMatchesByDate'");
-    }
-
-    @Override
     public Match joinMatch(int userId, int matchId) {
         Match match = matchRepository.findById(matchId)
             .orElseThrow(() -> new IllegalArgumentException("Match not found with ID: " + matchId));
@@ -145,81 +98,6 @@ public class MatchService implements IMatchService {
         return matchRepository.save(matchContext.getMatch()); // Guardar el estado actualizado del partido
     }
 
-    @Override
-    public void confirmMatch(int matchId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'confirmMatch'");
-    }
-
-    @Override
-    public void finishMatch(int matchId) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'finishMatch'");
-    }
-
-
-    @Override
-    public List<User> matchPlayers(List<User> availableUsers, Match match) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'matchPlayers'");
-    }
-
-    @Override
-    public void setMatchingStrategy(IMatchingStrategy strategy) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setMatchingStrategy'");
-    }
-
-    @Override
-    public IMatchingStrategy getMatchingStrategy() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMatchingStrategy'");
-    }
-
-    @Override
-    public void setMatchState(IMatchState state) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setMatchState'");
-    }
-
-    @Override
-    public IMatchState getMatchState(Match match) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMatchState'");
-    }
-
-    @Override
-    public void changeMatchState(Match match, IMatchState newState) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'changeMatchState'");
-    }
-
-    @Override
-    public List<Match> getMatchesBySkillLevel(SKILL_LEVEL_ENUM minSkillLevel,
-            SKILL_LEVEL_ENUM maxSkillLevel) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMatchesBySkillLevel'");
-    }
-
-    @Override
-    public List<Match> getMatchesBySportAndSkillLevel(Sport sport, SKILL_LEVEL_ENUM minSkillLevel,
-            SKILL_LEVEL_ENUM maxSkillLevel) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMatchesBySportAndSkillLevel'");
-    }
-
-    @Override
-    public List<Match> getMatchesBySportAndLocation(Sport sport, Location location) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getMatchesBySportAndLocation'");
-    }
-    // Business logic related to Match
-
-    @Override
-    public void updateMatchProgress(Long matchId, int progress) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateMatchProgress'");
-    }
     @Override
     public List<Match> getMatchesByProximityByUserId(int userId, double radius) {
         User user = userService.getUserById(userId);
@@ -286,35 +164,23 @@ public class MatchService implements IMatchService {
     
     @Scheduled(fixedRate = 60000) // cada 60 segundos
     public void updateMatchStates() {
-        LocalDateTime now = LocalDateTime.now();
+
         List<MatchStateEnum> estados = List.of(
         MatchStateEnum.NEED_PLAYER,
-        MatchStateEnum.MATCH_ARRANGED
+        MatchStateEnum.MATCH_ARRANGED,
+        MatchStateEnum.CONFIRMED,
+        MatchStateEnum.IN_PROGRESS
         );
 
-        List<Match> matchesToCancel = matchRepository.findAllByStartTimeBeforeAndStatus(now, estados);
+        List<Match> matches = matchRepository.findAllByStateEnumIn(estados);
 
-
-        for (Match match : matchesToCancel) {
+        for(Match match : matches){
             MatchContext context = new MatchContext(match);
-            context.setCurrentState(new CancelledState());
+            context.setCurrentState(StateFactory.createState(match.getStateEnum()));
+            context.updateProgress();
             matchRepository.save(context.getMatch());
         }
 
-        List<Match> matchesToStart = matchRepository.findAllByStartTimeBeforeAndStatus(now, MatchStateEnum.CONFIRMED);
 
-        for (Match match : matchesToStart) {
-            MatchContext context = new MatchContext(match);
-            context.setCurrentState(new InProgressState());
-            matchRepository.save(context.getMatch());
-        }
-
-        List<Match> matchesToFinish = matchRepository.findAllByStartTimeBeforeAndStatus(now, MatchStateEnum.IN_PROGRESS);
-
-        for (Match match : matchesToFinish) {
-            MatchContext context = new MatchContext(match);
-            context.setCurrentState(new FinishedState()); // Cambiar a estado finalizado o el que corresponda
-            matchRepository.save(context.getMatch());
-        }
     }
 }

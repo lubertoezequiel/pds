@@ -36,8 +36,8 @@ public class NeedPlayerState implements IMatchState {
     }
 
     @Override
-    public void updateProgress(MatchContext context, int progress) {
-        throw new IllegalStateException("Cannot update progress in NeedPlayer state");
+    public void updateProgress(MatchContext context) {
+                context.setCurrentState(new CancelledState());
     }
 
     @Override

@@ -7,19 +7,18 @@ public class MatchDTO {
     private int id; 
     private int sport;
     private int duration;
-    private LocalDateTime date;
-    private LocalDateTime time;
+    private LocalDateTime startTime;
     private int [] idPlayers;
     private LocationDTO location;
     private String strategy;
     private String state;
 
-    public MatchDTO(int sport, int duration, LocalDateTime date, LocalDateTime time) {
+    public MatchDTO(int sport, int duration, LocalDateTime startTime) {
 
         this.sport = sport;
         this.duration = duration;
-        this.date = date;
-        this.time = time;
+        this.startTime = startTime;
+
     }
 
     public int getSport() {
@@ -38,20 +37,12 @@ public class MatchDTO {
         this.duration = duration;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getStartTime() {
+        return this.startTime;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public int getId() {

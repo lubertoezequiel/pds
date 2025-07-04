@@ -1,6 +1,5 @@
 package com.g4.tp.model.state;
 
-import com.g4.tp.model.state.MatchContext;
 import com.g4.tp.model.entities.User;
 
 public interface IMatchState {
@@ -13,7 +12,7 @@ public interface IMatchState {
 
     public void confirmMatch(MatchContext context);
 
-    public void updateProgress(MatchContext context, int progress);
+    public void updateProgress(MatchContext context);
 
     public String getStateName();
 
