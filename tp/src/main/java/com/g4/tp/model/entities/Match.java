@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.g4.tp.model.entities.PARTICIPATIONSTATUS.PENDING;
 import com.g4.tp.model.state.MatchStateEnum;
 import com.g4.tp.model.strategy.IMatchingStrategy;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,9 +17,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -39,9 +40,10 @@ public class Match {
     @Embedded
     private Location location;
 
-    @ManyToMany
-    @JoinTable(name = "match_players", joinColumns = @JoinColumn(name = "match_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<User> players = new ArrayList<>();
+    @OneToMany(mappedBy = "match", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Participant> players = new ArrayList<>();
+
+    
 
     @Enumerated(EnumType.STRING)
     private MatchStateEnum stateEnum;
@@ -132,15 +134,16 @@ public class Match {
         this.location = location;
     }
 
-    public List<User> getPlayers() {
+    public List<Participant> getParticipants() {
         return players;
     }
 
-    public void setPlayers(List<User> players) {
+    public void setParticipant(List<Participant> players) {
         this.players = players;
     }
 
-    public void addPlayer(User user) {
-        this.players.add(user);
+    public void addPlayer(User player) {
+        Participant newParticipant = new Participant(player, this,PENDING);
+        this.players.add(newParticipant);
     }
 }

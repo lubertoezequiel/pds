@@ -45,7 +45,7 @@ public class ProximityMatching implements IMatchingStrategy {
         });
 
         // Retornar solo los jugadores necesarios para completar el partido
-        int playersNeeded = match.getSport().getRequiredPlayers() - match.getPlayers().size();
+        int playersNeeded = match.getSport().getRequiredPlayers() - match.getParticipants().size();
         return filteredUsers.stream()
                 .limit(playersNeeded)
                 .collect(Collectors.toList());

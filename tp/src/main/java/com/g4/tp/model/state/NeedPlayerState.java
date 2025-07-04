@@ -12,14 +12,15 @@ public class NeedPlayerState implements IMatchState {
     @Override
     public void joinUser(User user, MatchContext context) {
         // VALIDACIÓN: Evitar usuarios duplicados
-        if (context.getMatch().getPlayers().contains(user)) {
+        if (context.getMatch().getParticipants().stream()
+                .anyMatch(participant -> participant.getUser().getId() == user.getId())) {
             throw new IllegalStateException("El usuario ya está registrado en este partido");
         }
 
         context.getMatch().addPlayer(user);
 
         // Transición automática cuando se alcanza el número requerido
-        if (context.getMatch().getPlayers().size() >= context.getMatch().getSport().getRequiredPlayers()) {
+        if (context.getMatch().getParticipants().size() >= context.getMatch().getSport().getRequiredPlayers()) {
             context.setCurrentState(new MatchArrangedState());
         }
     }

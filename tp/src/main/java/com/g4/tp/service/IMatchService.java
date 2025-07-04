@@ -22,8 +22,8 @@ public interface IMatchService {
     List<Match> getMatchesBySport(Sport sport);
     List<Match> getMatchesByLocation(Location location);
     List<Match> getMatchesByDate(LocalDateTime date);
-    void joinMatch(int userId, int matchId);
-    void cancelMatch(int matchId);
+    Match joinMatch(int userId, int matchId);
+    Match cancelMatch(int matchId);
     void confirmMatch(int matchId);
     void finishMatch(int matchId);
     void updateMatchProgress(Long matchId, int progress);
@@ -38,5 +38,6 @@ public interface IMatchService {
     List<Match> getMatchesBySportAndLocation(Sport sport, Location location);
     List<Match> getMatchesByProximity(Location userLocation, double radius);
     List<Match> getMatchesByProximityByUserId(int userId, double radius);
+    Match acceptParticipation(int matchId, int userId);
 
 }

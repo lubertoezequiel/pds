@@ -1,12 +1,14 @@
 package com.g4.tp.controller;
 
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +20,7 @@ import com.g4.tp.mapper.MatchMapper;
 import static com.g4.tp.mapper.MatchMapper.convertToDTO;
 import com.g4.tp.model.entities.Match;
 import com.g4.tp.service.IMatchService;
+
 
 
 
@@ -40,7 +43,7 @@ public class MatchController {
         try {
             Match matchEntity = matchMapper.convertToEntity(match);
             Match savedMatch = matchService.createMatch(matchEntity); 
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedMatch);
+            return ResponseEntity.status(HttpStatus.CREATED).body(convertToDTO(savedMatch));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body("Invalid match data: " + e.getMessage());
@@ -54,9 +57,6 @@ public class MatchController {
     public ResponseEntity<?> getMatchById(@RequestParam int id) {
         try {
             Match match = matchService.getMatchById(id);
-            if (match == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Match not found with ID: " + id);
-            }
             MatchDTO matchDTO = convertToDTO(match);
             matchDTO.setLocation(locationMapper.convertToLocationDTO(match.getLocation()));
             return ResponseEntity.status(HttpStatus.OK).body(matchDTO);
@@ -66,24 +66,55 @@ public class MatchController {
         }
 
     }
-    @PostMapping("addPlayer")
+    
+    @PostMapping("/addPlayer")
     public ResponseEntity<?> addPlayer(@RequestParam int userId , @RequestParam int matchId) {
         try{
-            matchService.joinMatch(userId, matchId);
-            Map<String, String> message = Map.of("message", "Player added successfully to the match");
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(message);
+            Match match= matchService.joinMatch(userId, matchId);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertToDTO(match));
         }catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }    
         
     }
+
     @GetMapping("/getProximityMatches")
     public ResponseEntity<?> getProximityMatches(@RequestParam int userId) {
         try {
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(matchService.getMatchesByProximityByUserId(userId, 400));
+            List<Match> matches = matchService.getMatchesByProximityByUserId(userId, 400);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(matches.stream()
+                .map(MatchMapper::convertToDTO)
+                .toList());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body("Error retrieving proximity matches: " + e.getMessage());
+        }
+    }
+
+    @PutMapping("/match/accept")
+    public ResponseEntity<?> acceptParticipation(@RequestParam("matchid") int matchId, @RequestParam("participantid") int participantId) {
+        try {
+            Match match = matchService.acceptParticipation(matchId, participantId);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertToDTO(match));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body("Invalid match or participant ID: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+    
+
+    @PutMapping("/cancel/{id}")
+    public ResponseEntity<?> cancelMatch(@PathVariable int id) {
+        try {
+            Match match=matchService.cancelMatch(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(convertToDTO(match));
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body("Invalid match ID: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 }

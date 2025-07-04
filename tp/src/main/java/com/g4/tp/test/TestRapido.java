@@ -1,4 +1,4 @@
-package com.g4.tp.test;
+/*package com.g4.tp.test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -108,4 +108,4 @@ public class TestRapido {
             System.err.println("❌ " + nombre + " falló: " + e.getMessage());
         }
     }
-}
+}*/

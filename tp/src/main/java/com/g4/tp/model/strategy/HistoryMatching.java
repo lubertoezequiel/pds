@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.g4.tp.model.entities.Match;
 import com.g4.tp.model.entities.User;
 
-@Component
+@Component("historyMatchingStrategy")
 public class HistoryMatching implements IMatchingStrategy {
 
     private int minMatchesPlayed = 5;

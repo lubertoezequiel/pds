@@ -1,6 +1,6 @@
 package com.g4.tp.model.state;
 
-import com.g4.tp.model.state.MatchContext;
+import com.g4.tp.model.entities.PARTICIPATIONSTATUS;
 import com.g4.tp.model.entities.User;
 
 public class MatchArrangedState implements IMatchState {
@@ -22,8 +22,19 @@ public class MatchArrangedState implements IMatchState {
 
     @Override
     public void confirmMatch(MatchContext context) {
-        // Transición a estado confirmado
-        context.setCurrentState(new ConfirmedState());
+        
+        if(context.getMatch().getParticipants().isEmpty()) {
+            throw new IllegalStateException("Cannot confirm match with no participants");
+        }
+
+        context.getMatch().getParticipants().forEach(participant -> {
+            if (participant.getStatus() == PARTICIPATIONSTATUS.PENDING) {
+                return;
+            }
+            context.setCurrentState(new ConfirmedState());
+        });
+
+
     }
 
     @Override

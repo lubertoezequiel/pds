@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 
 import com.g4.tp.DTOs.MatchDTO;
 import com.g4.tp.model.entities.Match;
+import static com.g4.tp.model.entities.PARTICIPATIONSTATUS.PENDING;
+import com.g4.tp.model.entities.Participant;
 import com.g4.tp.model.entities.Sport;
 import com.g4.tp.model.entities.User;
 import com.g4.tp.model.strategy.HistoryMatching;
@@ -34,9 +36,9 @@ public class MatchMapper {
 
     public  Match convertToEntity(MatchDTO matchDTO) {
         Match match = new Match();
-        List<User> players = new ArrayList<>();
+        List<Participant> players = new ArrayList<>();
 
-        Sport aux = sportService.getSportById(2);
+        Sport aux = sportService.getSportById(matchDTO.getSport());
 
         System.out.println("Converting MatchDTO to Match entity: " + aux.getName());
         try {
@@ -57,11 +59,13 @@ public class MatchMapper {
         if (matchDTO.getIdPlayers() != null) {
             for (int playerId : matchDTO.getIdPlayers()) {
                 User user = userService.getUserById(playerId);
+                
                 if (user != null) {
-                players.add(user);
-            } else {
-                throw new IllegalArgumentException("User not found with ID: " + playerId);
-            }
+                    players.add(new Participant(user, match, PENDING));
+                } else {
+                    throw new IllegalArgumentException("User not found with ID: " + playerId);
+                }
+            
         }
 
                 // Seteamos la estrategia según el string
@@ -80,7 +84,7 @@ public class MatchMapper {
 
 
     
-    match.setPlayers(players);
+    match.setParticipant(players);
        
         return match;
     }
@@ -93,9 +97,11 @@ public class MatchMapper {
         matchDTO.setDuration(match.getDuration());
         matchDTO.setDate(match.getDate());
         matchDTO.setTime(match.getTime());
-        matchDTO.setIdPlayers(match.getPlayers().stream().mapToInt(User::getId).toArray());
+        matchDTO.setIdPlayers(match.getParticipants().stream()
+                .mapToInt(participant -> participant.getUser().getId())
+                .toArray());
         matchDTO.setStrategy(match.getMatchingStrategy() != null ? match.getMatchingStrategy().getName() : null);
-        matchDTO.setState(match.getState().getStateName());
+
         
         return matchDTO;
     }
